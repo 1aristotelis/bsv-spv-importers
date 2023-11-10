@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "node detectlock.js"
     },
     "keywords": [],
     "author": "",
@@ -14,8 +14,8 @@
         "bmap": "^1.0.1",
         "bmapjs": "^0.4.0-beta.42",
         "boostpow": "^1.8.1",
+        "bsv": "^1.5.6",
         "bsv-spv": "^0.5.7",
-        "dotenv": "^16.0.3",
-        "scrypt-ts": "^1.3.17"
+        "dotenv": "^16.0.3"
     }
 }

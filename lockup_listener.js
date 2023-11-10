@@ -11,7 +11,7 @@ const listener = new Listener({ name, ticker, blockHeight, dataDir });
 
 const { connect } = require("amqplib");
 
-const detectLockupFromTxHex = require("../src/contracts/lockup");
+const detectLockupFromTxHex = require("./utils/lockup");
 
 var amqp;
 
@@ -55,7 +55,7 @@ const onBlock = async ({
   for (const [index, tx, pos, len] of transactions) {
     const hex = tx.toHex();
 
-    let [lockup, vout] = await detectLockupFromTxHex(hex);
+    let [lockup, vout] = detectLockupFromTxHex(hex);
 
     if (lockup) {
       console.log("lockup.block.discovered");
@@ -82,7 +82,7 @@ listener.on("mempool_tx", async ({ transaction, size }) => {
   try {
     const hex = transaction.toHex();
 
-    let [lockup, vout] = await detectLockupFromTxHex(hex);
+    let [lockup, vout] = detectLockupFromTxHex(hex);
 
     if (lockup) {
       console.log("lockup.mempool.discovered");
