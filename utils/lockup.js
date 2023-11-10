@@ -25,14 +25,14 @@ function detectLockupFromTxHex(txhex) {
         if (output.script.toHex().includes(LOCKUP_PREFIX)){
             const hexAddr = output.script.chunks[5]?.buf.toString("hex")
             const script = bsv.Script.fromASM(`OP_DUP OP_HASH160 ${hexAddr} OP_EQUALVERIFY OP_CHECKSIG`)
-            address = bsv.Address.fromScript(script).toString()
+            const address = bsv.Address.fromScript(script).toString()
             const hexBlock = output.script.chunks[6].buf.toString("hex")
-            blockheight = hex2Int(hexBlock)
-            satoshis = output.satoshis
+            const lockUntilHeight = hex2Int(hexBlock)
+            const satoshis = output.satoshis
             lockupData = {
                 address,
                 satoshis,
-                blockheight
+                lockUntilHeight
             }
             break;
         }

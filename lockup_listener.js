@@ -55,9 +55,10 @@ const onBlock = async ({
   for (const [index, tx, pos, len] of transactions) {
     const hex = tx.toHex();
 
-    let [lockup, vout] = detectLockupFromTxHex(hex);
+    let lockup = detectLockupFromTxHex(hex);
 
     if (lockup) {
+      const { address, satoshis, lockUntilHeight } = lockup
       console.log("lockup.block.discovered");
 
       amqp.publish(
@@ -66,9 +67,10 @@ const onBlock = async ({
         Buffer.from(
           JSON.stringify({
             txid: tx.hash,
-            lockup,
-            lock_vout: vout,
             hex,
+            address,
+            satoshis,
+            lockUntilHeight,
             blockHeight: height,
             blockHeader: header,
           })
@@ -82,9 +84,10 @@ listener.on("mempool_tx", async ({ transaction, size }) => {
   try {
     const hex = transaction.toHex();
 
-    let [lockup, vout] = detectLockupFromTxHex(hex);
+    let lockup = detectLockupFromTxHex(hex);
 
     if (lockup) {
+      const { address, satoshis, lockUntilHeight } = lockup
       console.log("lockup.mempool.discovered");
 
       amqp.publish(
@@ -93,8 +96,9 @@ listener.on("mempool_tx", async ({ transaction, size }) => {
         Buffer.from(
           JSON.stringify({
             txid: transaction.hash,
-            lockup,
-            lock_vout: vout,
+            address,
+            satoshis,
+            lockUntilHeight,
             hex,
           })
         )
