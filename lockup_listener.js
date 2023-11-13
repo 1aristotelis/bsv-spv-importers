@@ -59,7 +59,15 @@ const onBlock = async ({
 
     if (lockup) {
       const { address, satoshis, lockUntilHeight } = lockup
-      console.log("lockup.block.discovered");
+      console.log(`lock.discovered.block.#${height}`, {
+            txid: tx.hash,
+            hex,
+            address,
+            satoshis,
+            lockUntilHeight,
+            blockHeight: height,
+            blockHeader: header,
+      });
 
       amqp.publish(
         "sapience",
@@ -88,7 +96,13 @@ listener.on("mempool_tx", async ({ transaction, size }) => {
 
     if (lockup) {
       const { address, satoshis, lockUntilHeight } = lockup
-      console.log("lockup.mempool.discovered");
+      console.log("lock.discovered.mempool", {
+            txid: transaction.hash,
+            address,
+            satoshis,
+            lockUntilHeight,
+            hex,
+        });
 
       amqp.publish(
         "sapience",
