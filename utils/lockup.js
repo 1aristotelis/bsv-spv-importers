@@ -28,7 +28,7 @@ function detectLockupFromTxHex(txhex) {
             const address = bsv.Address.fromScript(script).toString()
             const hexBlock = output.script.chunks[6].buf.toString("hex")
             const lockUntilHeight = hex2Int(hexBlock)
-            const satoshis = output.satoshis
+            const satoshis = Number(output.satoshis)
             lockupData = {
                 address,
                 satoshis,
