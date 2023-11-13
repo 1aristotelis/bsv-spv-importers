@@ -60,7 +60,7 @@ const onBlock = async ({
     if (lockup) {
       const { address, satoshis, lockUntilHeight } = lockup
       console.log(`lock.discovered.block.#${height}`, {
-            txid: tx.hash,
+            txid: tx.getTxid(),
             hex,
             address,
             satoshis,
@@ -74,7 +74,7 @@ const onBlock = async ({
         "block.lockup.transaction.discovered",
         Buffer.from(
           JSON.stringify({
-            txid: tx.hash,
+            txid: tx.getTxid(),
             hex,
             address,
             satoshis,
@@ -97,7 +97,7 @@ listener.on("mempool_tx", async ({ transaction, size }) => {
     if (lockup) {
       const { address, satoshis, lockUntilHeight } = lockup
       console.log("lock.discovered.mempool", {
-            txid: transaction.hash,
+            txid: transaction.getTxid(),
             address,
             satoshis,
             lockUntilHeight,
@@ -109,7 +109,7 @@ listener.on("mempool_tx", async ({ transaction, size }) => {
         "mempool.lockup.transaction.discovered",
         Buffer.from(
           JSON.stringify({
-            txid: transaction.hash,
+            txid: transaction.getTxid(),
             address,
             satoshis,
             lockUntilHeight,
