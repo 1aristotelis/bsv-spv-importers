@@ -23,7 +23,7 @@ function detectLockupFromTxHex(txhex) {
 
     for (let i = 0; i < tx.outputs.length; i++) {
         let output = tx.outputs[i]
-        if (output.script.toHex().includes(LOCKUP_PREFIX)){
+        if (output.script.toHex().startsWith(LOCKUP_PREFIX) && output.script.toHex().endsWith(LOCKUP_SUFFIX)){
             const hexAddr = output.script.chunks[5]?.buf.toString("hex")
             const script = bsv.Script.fromASM(`OP_DUP OP_HASH160 ${hexAddr} OP_EQUALVERIFY OP_CHECKSIG`)
             const address = bsv.Address.fromScript(script).toString()
