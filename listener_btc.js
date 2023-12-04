@@ -11,7 +11,7 @@ const listener = new Listener({ name, ticker, blockHeight, dataDir });
 var amqp;
 
 async function startAmqp() {
-  const connection = await connect(process.env.amqp_url);
+  const connection = await connect("amqp://guest:guest@localhost:5672");
 
   amqp = await connection.createChannel();
 
