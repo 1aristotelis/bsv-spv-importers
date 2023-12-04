@@ -42,7 +42,7 @@ const onBlock = ({
               size,
               height,
               txCount,
-              transactions,
+              txs,
               startDate,
           })
       ))

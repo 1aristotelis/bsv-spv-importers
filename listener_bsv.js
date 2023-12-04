@@ -31,12 +31,13 @@ const onBlock = ({
   startDate,
 }) => {
   const txs = transactions.map((tx) => tx.getTxid())
+  const headerHash = header.getHash()
   amqp.publish(
       "sapience",
       "bsv.spv.block",
       Buffer.from(
           JSON.stringify({
-              header,
+              header: headerHash,
               started,
               finished,
               size,
@@ -57,11 +58,13 @@ listener.on("mempool_tx", ({ transaction, size }) => {
       "en-US"
     )} bytes.`
   );
+  const txhex = transaction.toHex()
+  const txid = transaction.getTxid()
   amqp.publish(
     "sapience",
     "bsv.spv.mempool",
     Buffer.from(
-        JSON.stringify({ transaction, size })
+        JSON.stringify({ txhex, txid, size })
     )
   )
 });
