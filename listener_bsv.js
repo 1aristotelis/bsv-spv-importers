@@ -33,7 +33,7 @@ const onBlock = ({
   const txs = transactions.map((tx) => tx.getTxid())
   const headerHash = header.getHash()
   try {
-    amqp.publish(
+    amqp && amqp.publish(
         "sapience",
         "bsv.spv.block",
         Buffer.from(
@@ -44,7 +44,7 @@ const onBlock = ({
                 size,
                 height,
                 txCount,
-                //txs,
+                txs,
                 startDate,
             })
     ))
@@ -65,7 +65,7 @@ listener.on("mempool_tx", ({ transaction, size }) => {
   const txhex = transaction.toHex()
   const txid = transaction.getTxid()
   try {
-    amqp.publish(
+    amqp && amqp.publish(
       "sapience",
       "bsv.spv.mempool",
       Buffer.from(
@@ -79,7 +79,7 @@ listener.on("mempool_tx", ({ transaction, size }) => {
 listener.on("block_reorg", ({ height, hash }) => {
   // Re-org after height
   try {
-    amqp.publish(
+    amqp && amqp.publish(
           "sapience",
           "bsv.spv.reorg",
           Buffer.from(
