@@ -30,23 +30,24 @@ const onBlock = ({
   transactions,
   startDate,
 }) => {
+  const txs = transactions.map((tx) => tx.getTxid())
+  amqp.publish(
+      "sapience",
+      "bsv.spv.block",
+      Buffer.from(
+          JSON.stringify({
+              header,
+              started,
+              finished,
+              size,
+              height,
+              txCount,
+              txs,
+              startDate,
+          })
+  ))
   for (const [index, tx, pos, len] of transactions) {
     console.log(`#${index} tx ${tx.getTxid()} in block ${height}`);
-    amqp.publish(
-        "sapience",
-        "bsv.spv.block",
-        Buffer.from(
-            JSON.stringify({
-                header,
-                started,
-                finished,
-                size,
-                height,
-                txCount,
-                transactions,
-                startDate,
-            })
-        ))
   }
 };
 
