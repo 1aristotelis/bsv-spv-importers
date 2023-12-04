@@ -32,51 +32,63 @@ const onBlock = ({
 }) => {
   const txs = transactions.map((tx) => tx.getTxid())
   const headerHash = header.getHash()
-  amqp.publish(
-      "sapience",
-      "bsv.spv.block",
-      Buffer.from(
-          JSON.stringify({
-              header: headerHash,
-              started,
-              finished,
-              size,
-              height,
-              txCount,
-              txs,
-              startDate,
-          })
-  ))
-  for (const [index, tx, pos, len] of transactions) {
-    console.log(`#${index} tx ${tx.getTxid()} in block ${height}`);
+  try {
+    amqp.publish(
+        "sapience",
+        "bsv.spv.block",
+        Buffer.from(
+            JSON.stringify({
+                header: headerHash,
+                started,
+                finished,
+                size,
+                height,
+                txCount,
+                txs,
+                startDate,
+            })
+    ))
+  } catch (error) {
+    console.log(error)    
   }
+  /* for (const [index, tx, pos, len] of transactions) {
+    console.log(`#${index} tx ${tx.getTxid()} in block ${height}`);
+  } */
 };
 
 listener.on("mempool_tx", ({ transaction, size }) => {
-  console.log(
+  /* console.log(
     `new mempool tx ${transaction.getTxid()} ${size.toLocaleString(
       "en-US"
     )} bytes.`
-  );
+  ); */
   const txhex = transaction.toHex()
   const txid = transaction.getTxid()
-  amqp.publish(
-    "sapience",
-    "bsv.spv.mempool",
-    Buffer.from(
-        JSON.stringify({ txhex, txid, size })
+  try {
+    amqp.publish(
+      "sapience",
+      "bsv.spv.mempool",
+      Buffer.from(
+          JSON.stringify({ txhex, txid, size })
+      )
     )
-  )
+  } catch (error) {
+    console.log(error)    
+  }
 });
 listener.on("block_reorg", ({ height, hash }) => {
   // Re-org after height
+  try {
     amqp.publish(
-        "sapience",
-        "bsv.spv.reorg",
-        Buffer.from(
-            JSON.stringify({ height, hash })
-        )
-    )
+          "sapience",
+          "bsv.spv.reorg",
+          Buffer.from(
+              JSON.stringify({ height, hash })
+          )
+      )
+  } catch (error) {
+    console.log(error)    
+  }  
 });
 listener.on("block_saved", ({ height, hash }) => {
   listener.syncBlocks(onBlock);
