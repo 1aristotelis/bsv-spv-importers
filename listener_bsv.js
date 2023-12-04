@@ -32,8 +32,8 @@ const onBlock = ({
 }) => {
   const txs = transactions.map((tx) => tx.getTxid())
   const headerHash = header.getHash()
-  try {
-    amqp && amqp.publish(
+  
+    amqp.publish(
         "sapience",
         "bsv.spv.block",
         Buffer.from(
@@ -48,9 +48,6 @@ const onBlock = ({
                 startDate,
             })
     ))
-  } catch (error) {
-    console.log(error)    
-  }
   /* for (const [index, tx, pos, len] of transactions) {
     console.log(`#${index} tx ${tx.getTxid()} in block ${height}`);
   } */
@@ -64,31 +61,23 @@ listener.on("mempool_tx", ({ transaction, size }) => {
   ); */
   const txhex = transaction.toHex()
   const txid = transaction.getTxid()
-  try {
-    amqp && amqp.publish(
+    amqp.publish(
       "sapience",
       "bsv.spv.mempool",
       Buffer.from(
           JSON.stringify({ txhex, txid, size })
       )
     )
-  } catch (error) {
-    console.log(error)    
-  }
 });
 listener.on("block_reorg", ({ height, hash }) => {
   // Re-org after height
-  try {
-    amqp && amqp.publish(
+    amqp.publish(
           "sapience",
           "bsv.spv.reorg",
           Buffer.from(
               JSON.stringify({ height, hash })
           )
       )
-  } catch (error) {
-    console.log(error)    
-  }  
 });
 listener.on("block_saved", ({ height, hash }) => {
   listener.syncBlocks(onBlock);
