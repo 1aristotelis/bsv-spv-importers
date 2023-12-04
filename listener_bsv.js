@@ -44,7 +44,7 @@ const onBlock = ({
                 size,
                 height,
                 txCount,
-                txs,
+                //txs,
                 startDate,
             })
     ))
