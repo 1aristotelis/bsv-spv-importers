@@ -18,8 +18,8 @@ const config = {
   // user_agent: 'Bitcoin SV',
   invalidBlocks: [], // Set if you want to force a specific fork (see examples below)
   dataDir: __dirname, // Directory to store files
-  pruneBlocks: 0, // Number of newest blocks you want saved to local disk. 0 to keeping all blocks back to genesis.
-  blockHeight: 580000, // Sync to block height. 0 to sync to genesis. Negative to sync to X blocks from current heightafter 2 hours
+  pruneBlocks: 144, // Number of newest blocks you want saved to local disk. 0 to keeping all blocks back to genesis.
+  blockHeight: -6 * 24 * 180, // Sync to block height. 0 to sync to genesis. Negative to sync to X blocks from current heightafter 2 hours
   mempool: 1, // Number of mempool tx threads
   blocks: 1, // Number of bitcoin block threads
 };
